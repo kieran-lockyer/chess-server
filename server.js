@@ -1,7 +1,7 @@
 const uuidv4 = require('uuid/v4');
 
 const WebSocketServer = require('ws').Server
-const wss = new WebSocketServer({port: 9090})
+const wss = new WebSocketServer({port: 3001})
 
 const games = []
 wss.on('connection', (connection, req) => {
