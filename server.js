@@ -1,10 +1,11 @@
 const uuidv4 = require('uuid/v4');
 
 const WebSocketServer = require('ws').Server
-const wss = new WebSocketServer({port: 3001})
+const wss = new WebSocketServer({port: process.env.PORT || 5000})
 
 const games = []
 wss.on('connection', (connection, req) => {
+    console.log('connected on port', process.env.PORT || 5000)
     connection.on('message', (message) => {
         const data = JSON.parse(message)
         if (data.action === 'searching') {
