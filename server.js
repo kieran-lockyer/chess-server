@@ -1,21 +1,30 @@
 const uuidv4 = require('uuid/v4');
+const express = require('express')
 
-const WebSocketServer = require('ws').Server
-const wss = new WebSocketServer({port: process.env.PORT || 5000})
+const PORT = process.env.PORT || 3001;
+const INDEX = '/index.html';
 
-console.log('connecting on port', process.env.PORT || 5000)
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`))
+
+const { Server } = require('ws');
+const wss = new Server({ server });
 
 const games = []
 wss.on('connection', (connection, req) => {
-    console.log('connected on port', process.env.PORT || 5000)
+    console.log('Player connected')
+    console.log('games', games)
     connection.on('message', (message) => {
         const data = JSON.parse(message)
         if (data.action === 'searching') {
             const player = data.token
             let openGameFound = false
             for (let game of games) {
-                if (game.white && !game.black) {
-                    if (game.white !== player) {
+                if (game.white && !game.black || game.white === player) {
+                    if (game.white === player) {
+                        break
+                    } else {
                         game.black = player
                         game.connections.push(connection)
                         openGameFound = true
