@@ -3,6 +3,8 @@ const uuidv4 = require('uuid/v4');
 const WebSocketServer = require('ws').Server
 const wss = new WebSocketServer({port: process.env.PORT || 5000})
 
+console.log('connecting on port', process.env.PORT || 5000)
+
 const games = []
 wss.on('connection', (connection, req) => {
     console.log('connected on port', process.env.PORT || 5000)
